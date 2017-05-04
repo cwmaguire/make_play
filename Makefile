@@ -40,6 +40,28 @@ words: words = a b c
 words:
 	# There are $(words $(words)) words in $(words)
 
+wordn: words = a b c
+wordn:
+	# $$(word 1,$$(words)) = $(word 1,$(words))
+	# $$(word 2,$$(words)) = $(word 2,$(words))
+	# $$(word 3,$$(words)) = $(word 3,$(words))
+
+firstword: words = a b c
+firstword:
+	# $$(firstword $$(words)) = $$(firstword $(words)) = $(firstword $(words))
+
+wordlist: words = a b c d e
+wordlist:
+	# $$(wordlist 1,2,$$(words)) = $$(wordlist 1,2,$(words)) = $(wordlist 1,2,$(words))
+	# $$(wordlist 2,3,$$(words)) = $$(wordlist 2,3,$(words)) = $(wordlist 2,3,$(words))
+	# $$(wordlist 3,5,$$(words)) = $$(wordlist 3,5,$(words)) = $(wordlist 3,5,$(words))
+	# $$(wordlist 5,3,$$(words)) = $$(wordlist 5,3,$(words)) = $(wordlist 5,3,$(words))
+	# $$(wordlist 3,1000,$$(words)) = $$(wordlist 3,1000,$(words)) = $(wordlist 3,1000,$(words))
+
+filterout: words = aa ab ac ad
+filterout:
+	# $$(filter-out %b,$$(words)) = $$(filter-out %b,$(words)) = $(filter-out %b,$(words))
+
 findstring: string = abc
 findstring:
 	# Result of $$(findstring ab,$$(string)): $(findstring ab,$(string))
@@ -51,3 +73,7 @@ findstring:
 subst: string = abc
 subst:
 	# Result of $$(subst b,c,$$(string)): $(subst b,c,$(string))
+
+sort: words = c d b a e
+sort:
+	# $$(sort $$(words)) = $$(sort $(words)) = $(sort $(words))
