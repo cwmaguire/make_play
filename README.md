@@ -2,11 +2,11 @@
 
 Exercises while reading "Manage Projects with GNU Make"
 
-From this directory run "make" or "make target" where "target" is one of
+From this directory run "make" or "make *target*" where "*target*" is one of
 the targets in Makefile. GNU make will find Makefile automatically.
 
 Examples:
 
-make a
-make b
-make 1.a
+make a<p>
+make b<p>
+make 1.a<p>
