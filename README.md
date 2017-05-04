@@ -7,6 +7,6 @@ the targets in Makefile. GNU make will find Makefile automatically.
 
 Examples:
 
-make a<p>
-make b<p>
-make 1.a<p>
+`make a`<p>
+`make b`<p>
+`make 1.a`<p>
