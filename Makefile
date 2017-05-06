@@ -1,5 +1,5 @@
 # Even if the file b exists the b rule will fire
-.PHONY: b
+.PHONY: b error warning
 
 # default rule
 a:
@@ -34,6 +34,19 @@ f.c:
 i: A = 1
 i:
 	# $$A = $A
+
+# Double-expand
+j: A = 1
+j: B = A
+j:
+	# $$(A) = $(A)
+	# $$(B) = $(B)
+	# $$($$(B)) : $($(B))
+	# Double expansion requires parenthesis:
+	#   $$$$B = $$B
+	#   $$$$(B) = $$(B)
+	# Separate the $$'s:
+	#   $$($$B) = $($B)
 
 # words function: counts words
 words: words = a b c
@@ -77,3 +90,96 @@ subst:
 sort: words = c d b a e
 sort:
 	# $$(sort $$(words)) = $$(sort $(words)) = $(sort $(words))
+
+shell: command = ls -al
+shell: path = a b c
+shell:
+	@echo $(shell ls)
+	@echo $(shell $(command))
+	@echo $(shell [[ -e $(path) ]] || echo nope )
+
+filter: words = aa ab bb
+filter:
+	# $$(filter a%,$$(words)) : $$(filter a%,$(words)) : $(filter a%,$(words)) should equal aa ab
+
+# Relative path
+wildcard:
+	# $$(wildcard *.a *.b) : $(wildcard *.a *.b)
+	# $$(wildcard *.c) : $(wildcard *.c)
+
+dir:
+	# $$(dir a b c) : $(dir a b c)
+
+notdir: path = $(shell pwd)
+notdir: paths = $(path)/a $(path)/b $(path)/c
+notdir:
+	# $$(paths): $(paths)
+	# $$(notdir $$(paths)) : $(notdir $(paths))
+
+# returns last dot-extension
+suffix:
+	# $$(suffix abc.def ghi.jkl, mno.pqr.stu)
+	# becomes
+	# $(suffix abc.def ghi.jkl, mno.pqr.stu)
+
+# keeps path elements
+basename: path = $(shell pwd)
+basename: paths = $(path)/a.x $(path)/b.x $(path)/c.x
+basename:
+	# $$(paths): $(paths)
+	# $$(basename $$(paths)) : $(basename $(paths))
+
+addsuffix:
+	# $$(addsuffix .txt,a b c) : $(addsuffix .txt,a b c)
+
+addprefix:
+	# $$(addprefix ___,a b c) : $(addprefix ___,a b c)
+
+join:
+	# $$(join a b c, .x .y .w) : $(join a b c, .x .y .w)
+
+if: false :=
+if: true := 1
+if:
+	# $$(if $$(false),yup,nope) : $$(if $(false),yup,nope) : $(if $(false),yup,nope)
+	# $$(if $$(true),yup,nope) : $$(if $(true),yup,nope) : $(if $(true),yup,nope)
+
+error:
+	$(error 'An error')
+
+warning:
+	$(warning 'A warning')
+
+foreach:
+	# $$(foreach a,a b c d,$$(addprefix -,$$(addsuffix -,$$(a)))) :
+	# $(foreach a,a b c d,$(addprefix -,$(addsuffix -,$(a))))
+
+strip:
+	# $$(foreach a,a,  $$(a)  ) -->$(foreach a,a,  $(a)  )<--
+	# $$(strip $$(foreach a,a,  $$(a)  ) -->$(strip $(foreach a,a,  $(a)  ))<--
+
+# use command-line or environment values for C & D
+# e.g. C=1 make origin D=1
+export B=1
+origin: A := 1
+origin:
+	# A is 'file' even when -e / --environment-overrides is on
+	# A: $(origin A)
+	# @: $(origin @)
+	# B: $(origin B)
+	# C: $(origin C)
+	# D: $(origin D)
+
+# a can be used with:
+# $(call a,arg1,arg2,...)
+# or
+# $(a) ... which returns 0 unless a outside call has set
+#          the $1, $2, etc. params
+define a
+  $(words $1 $2 $3 $4 $5 $6 $7 $8)
+endef
+
+calla:
+	# Function that references 8 arguments counts its
+	# arguments with $$(words ...)
+	# $$(call a,1,2,3) : $(call a,1,2,3)
