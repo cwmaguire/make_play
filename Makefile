@@ -1,9 +1,10 @@
 # Even if the file b exists the b rule will fire
-.PHONY: b error warning
+.PHONY: b
 
 # default rule
 a:
 	# a: This is printed as a shell comment
+# This comment does not start with a tab and won't show up
 
 b:
 	@echo b: This is printed by echo
@@ -47,6 +48,14 @@ j:
 	#   $$$$(B) = $$(B)
 	# Separate the $$'s:
 	#   $$($$B) = $($B)
+
+splitrule: A =1
+dummy: Z = 1; # can't use "B" because it's defined later on
+splitrule:
+	# $$(A) = $(A)
+# Z has not been defined in this rule even though dummy comes
+# in between the two splitrule clauses
+	# $$(Z) = $(Z)
 
 # words function: counts words
 words: words = a b c
@@ -160,7 +169,9 @@ strip:
 
 # use command-line or environment values for C & D
 # e.g. C=1 make origin D=1
-export B=1
+export B=1 # warning: this will show up in all rules!
+# Use --print-data-base (--no-builtin-rules is nice too) to see that
+# B=1 comes from this line.
 origin: A := 1
 origin:
 	# A is 'file' even when -e / --environment-overrides is on
@@ -183,3 +194,53 @@ calla:
 	# Function that references 8 arguments counts its
 	# arguments with $$(words ...)
 	# $$(call a,1,2,3) : $(call a,1,2,3)
+
+eval:
+	# eval rule processed
+
+# eval takes it's arguments and internalizes them as
+# part of the Makefile rules databse.
+$(eval eval2: eval)
+# We can now call "make eval2"
+
+# Make will expand all arguments to eval before
+# eval internalizes them
+EVAL3=eval3 : eval
+$(eval $(EVAL3))
+
+# On page 46 of "Managing Projects with GNU Make" we see that
+# "macros" (multi-line variables made with "define...endef"
+# have tabs prepended to each line when used in the context
+# of a command script.
+# (The "command script" is the list of commands run for a rule)
+eval4a = 1
+define EVAL4
+eval4:
+	# $$$$(eval4a) : $(eval4a)
+endef
+$(eval $(EVAL4))
+# We can now call "make eval4"
+# Why the $$$$?
+# Because make will expand the arguments to eval,
+# namely:
+#   $(eval4a) -> 1
+#   $$$$(eval4a) -> $$(eval4)
+# ... and then once eval is finished
+# make will expand any restulting code:
+#   $$(eval4) -> $(eval4)
+# ... so $$$$(eval4a) becomes $$(eval4a) and then
+# finally $(eval4a).
+
+# Here I was trying to use the nested eval to simply
+# expand a variable four times and I just couldn't make it happen.
+# I suspect it's because the eval call has to eval to something
+# that make can internalize as a make instruction
+# eval5a = 1
+# define EVAL5
+# eval5:
+# 	# $$(eval 1)
+# endef
+# $(eval $(EVAL5))
+
+  # $$(eval 1)
+
