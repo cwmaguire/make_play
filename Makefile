@@ -49,6 +49,9 @@ j:
 	# Separate the $$'s:
 	#   $$($$B) = $($B)
 
+empty_rule: ;
+# won't do anything
+
 splitrule: A =1
 dummy: Z = 1; # can't use "B" because it's defined later on
 splitrule:
