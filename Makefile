@@ -244,3 +244,16 @@ $(eval $(EVAL4))
 
   # $$(eval 1)
 
+# Call macro by name from argument
+
+define hook_a
+  $(call $(1),hook_a)
+endef
+
+define hook_b
+  @echo hook_b called from $(1)
+endef
+
+hook: hook_fun := hook_b
+hook:
+	$(call hook_a,$(hook_fun))
