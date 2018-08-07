@@ -1,0 +1,2 @@
+Match any specified file with a "terminal" double-colon rule and simply create the file.
+If no make target is specified (e.g. just "make") then make will error with "No targets"
