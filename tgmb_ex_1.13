@@ -1,0 +1,26 @@
+# vim: filetype=make
+# See page 18 of "The GNU Make Book"
+#
+# run with "make -f tgmb_ex_1.13"
+#
+# Functions
+
+make-truth = $(if $1,T) # The second argument to 'if' is optional
+make-truth-2 = $(if $1,T,) # empty second argument
+
+# " ", i.e. a space, is not an empty string
+$(info $(call make-truth, ))
+$(info $(call make-truth,true))
+$(info $(call make-truth,a b c))
+
+# These all return empty strings
+$(info $(call make-truth,)) # 1st argument is there, but it's the empty string
+EMPTY =
+$(info $(call make-truth,$(EMPTY)))
+VAR = $(EMPTY)
+$(info $(call make-truth,$(VAR)))
+
+
+.PHONY: all
+
+all:

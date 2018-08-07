@@ -1,0 +1,23 @@
+# vim: filetype=make
+# See page 11 of "The GNU Make Book"
+#
+# run with "make -f tgmb_ex_1.10"
+#
+# Variable += assignment
+# Spaces are always added between the original and
+# appended values
+
+.PHONY: all
+
+a=dog
+b=$(a:g=or)
+c = $(b) # c = door
+# add to a variable
+c += $(a) # c = door dog
+# spaces are optional
+c +=a # c = door dog a
+c+=b  # c = door dob a b
+
+# prints "a is dog, b is door, c is door dog a b"
+
+all: ; $(info a is $(a), b is $(b), c is $(c))

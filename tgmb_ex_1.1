@@ -1,0 +1,32 @@
+# exercise 1.1
+# run this with:
+#     foo=foo bar=bar baz=baz quux=quux make -f -e tgmb_ex_1.1 quux=qux2
+
+# print out the value of foo and then where the value came from
+$(info $(foo) $(origin foo))
+
+# reset the value of foo and reprint the origin
+foo=foo2
+$(info $(foo) $(origin foo))
+
+# try to set bar to something else and we'll see that it's still
+# set by the environment
+# Also demonstrates the firstword function in case we don't care whether
+# it was from the environment or an environment override
+$(info $(bar) $(origin bar))
+bar=bar2
+$(info $(bar) $(origin bar) $(firstword $(origin bar)))
+
+# use "override" to overrided the environment even when
+# -e / --environment-overrides is used
+$(info $(bar) $(origin bar))
+override bar=bar2
+$(info $(bar) $(origin bar))
+
+
+# Makefile override overrides command line, which overrides environment variable
+# (hint: you can set make variables in the make command line invocation AND in the
+#  shell environment)
+$(info $(quux) $(origin quux))
+override quux=quux3
+$(info $(quux) $(origin quux))

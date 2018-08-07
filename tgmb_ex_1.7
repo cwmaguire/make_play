@@ -1,0 +1,21 @@
+# vim: filetype=make
+# See page 11 of "The GNU Make Book"
+#
+# run with "make -f tgmb_ex_1.7"
+#
+# Override global vars for target and all dependencies
+
+.PHONY: all foo bar baz
+
+VAR = global scope
+# locally scoped variable overrides global VAR
+bar: VAR = local scope
+
+# prerequisites must be setup for the rule to fire
+# more than once
+all: foo bar
+bar: baz
+
+# 4 different rules on one line, NOT 1 rule with four
+# different targets: i.e. it will run four times
+all foo bar baz: ; @echo In $@ VAR is $(VAR)

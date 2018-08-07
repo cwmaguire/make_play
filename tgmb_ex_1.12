@@ -1,0 +1,54 @@
+# vim: filetype=make
+# See page 16 of "The GNU Make Book"
+#
+# run with "make -f tgmb_ex_1.12"
+#
+# ifdef and $(if test,true-part,false-part)
+
+EMPTY =
+VAR = $(EMPTY)
+EMPTY_VAR =
+EMPTY_VAR_VAR = EMPTY_VAR
+HAS_A_VALUE_VAR = HAS_A_VALUE
+$(if $(VAR),$(info VAR has a value),$(info VAR does not have a value))
+
+# The #' closes off the single quote for vim
+HAS_A_VALUE = I'm not empty#'
+$(if $(HAS_A_VALUE),$(info HAS_A_VALUE has a value: "$(HAS_A_VALUE)"),$(info HAS_A_VALUE does not have a value))
+
+# I just wanted to see if I could double-expand a variable
+# holding a variable name to the value held by that variable
+ifdef HAS_A_VALUE
+$(info Value of $(HAS_A_VALUE_VAR) is $($(HAS_A_VALUE_VAR)))
+endif
+
+ifdef NOT_A_VAR
+$(info NOT_A_VAR is defined: $(VAR))
+else
+$(info NOT_A_VAR is not defined)
+endif
+
+# For some reason this doesnt show up as empty
+# Ah, see page 17 - because the variable is lazily-evaluated
+# it actually has a value; it's just that that value evaluates
+# to nothing at runtime
+# "even though its value, when completely expanded, is an empty string"
+ifdef VAR
+$(info VAR is defined: "$(VAR)")
+else
+$(info VAR is not defined)
+endif
+
+# This var is defined, but empty, so shows up as undefined
+ifdef EMPTY_VAR
+$(info EMPTY_VAR is defined: "$(EMPTY_VAR)")
+else
+$(info EMPTY_VAR is not defined)
+endif
+
+# This var is defined, but empty, so shows up as undefined
+ifdef $(EMPTY_VAR_VAR)
+$(info $(EMPTY_VAR_VAR) is defined: "$(EMPTY_VAR)")
+else
+$(info $(EMPTY_VAR_VAR) is not defined)
+endif

@@ -1,0 +1,20 @@
+# vim: filetype=make
+# See page 7 of "The GNU Make Book"
+#
+# run with "make -f tgmb_ex_1.4"
+#
+# Even though neither of the variables is already in the environment
+# (in which case they would be re-export with new values) each of the
+# variables is exported because of .EXPORT_ALL_VARIABLES
+#
+# Note: not recommended
+
+.PHONY: all
+
+.EXPORT_ALL_VARIABLES:
+
+FOO=foo
+
+all: BAR=bar
+all:
+	@echo FOO is $$FOO BA$ is $$BAR

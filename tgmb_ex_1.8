@@ -1,0 +1,31 @@
+# vim: filetype=make
+# See page 11 of "The GNU Make Book"
+#
+# run with "make -f tgmb_ex_1.8"
+#
+# Same as tgmb_ex_1.6 except using a pattern
+# match on any rule starting with 'f'
+#
+# The foo target will now print:
+# "In foo VAR is starts with f"
+
+.PHONY: all foo bar baz
+
+VAR = global scope
+
+# depends on foo and bar
+all: foo bar
+all: ; @echo In $@ VAR is $(VAR)
+
+foo: ; @echo In $@ VAR is $(VAR)
+
+# locally scoped variable overrides global VAR
+bar: VAR = local scope
+bar: baz
+bar: ; @echo In $@ VAR is $(VAR)
+
+# run as dependency of bar with overridden VAR
+baz: ; @echo In $@ VAR is $(VAR)
+
+# Match any rule that starts with 'f'
+f%: VAR = starts with f

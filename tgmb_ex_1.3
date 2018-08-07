@@ -1,0 +1,32 @@
+# vim: filetype=make
+# See page 6 of "The GNU Make Book"
+#
+# run with "FOO=foo QUUX=quux make -f tgmb_ex_1.3"
+#
+# in all:
+#     FOO gets overridden,
+#     BAR is undefined
+#     BAZ is exported from within the makefile
+#     QUUX is unexported
+# in dep:
+#     QUUX is exported as dep_quux for the dep target only
+
+# re-export FOO as bar since it's already in the environment
+FOO=bar
+# overwrite the environment even if BAZ wasn't already in the environment
+export BAZ=baz
+# remove QUUX from the environment
+unexport QUUX
+
+# Environment variables are re-exported when overridden by make with the new value
+#
+# Page 6:
+# "This is because FOO was
+#  already present in the environment GNU make started with and then picked
+#  up the value bar inside the makefile."
+all: dep ; @echo all: FOO is $$FOO, BAR is $$BAR, BAZ is $$BAZ, QUUX is $$QUUX
+
+# Export QUUX just for this target
+dep: export QUUX=dep_quux
+dep:
+	@echo dep: QUUX is $$QUUX

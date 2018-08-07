@@ -1,0 +1,29 @@
+# vim: filetype=make
+# See page 8 of "The GNU Make Book"
+#
+# run with "FOO=foo make -f tgmb_ex_1.5"
+#
+# $(shell ...) uses the original shell before make was run
+# This is a bug that's not going away soon
+
+.PHONY: all
+
+export FOO=bar
+
+all:
+	# This comment will be visible as it's a valid shell command
+# this comment is invisible since not considered a shell command
+
+# outputs: Foo is foo 
+	$(info echo FOO from env: $(shell echo FOO is $$FOO))
+# similar except more clever
+	$(info grep FOO from printenv: $(shell printenv | grep FOO))
+
+# This will print the new value of FOO
+	@printenv | grep FOO # uses the environment modified by make
+
+# use the make variable to export to the shell on the command line
+	@$(info set FOO from makefile: $(shell FOO=$(FOO) printenv | grep FOO))
+
+# The @ symbol alone (below) will do nothing
+	@

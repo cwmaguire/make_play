@@ -1,0 +1,73 @@
+# vim: filetype=make
+# See page 5 of "The GNU Make Book"
+# These examples--with the example command line--show what precedence
+# the environment variables, command line variables and makefile variables have.
+# It also shows how defaulting works with FOO ?= foo and ifndef
+#
+# Note that:
+# Environment variables come before "make" in the command line
+#    e.g. FOO=1 make
+# Commandline Make variables come after "make" in the command line
+#    e.g. make FOO=1
+#
+# Run with:
+# ENVIRONMENT=environment NDEFENV="set by environment variable" NDEFENV2= NDEFENV3= NDEFENV4="" NDEFENV5="" make -f tgmb_ex_1.2 CMDLINE=commandline NTDEFCMD="set by makefile command line"
+ENV:= set by makefile
+ENV2 := set by makefile
+CMD := set by makefile
+CMD2 := set by makefile
+MAKEFILE := set by makefile
+
+ifndef DEF
+	DEF=default set by makefile
+endif
+
+ifndef NDEFENV
+	NDEFENV=default set by makefile
+endif
+
+ifndef NDEFCMD
+	NDEFCMD=default set by makefile
+endif
+
+ifndef NDEFENV2
+	# Should be set with NODEFENV2= in the shell (before "make" in the command line)
+	NDEFENV2 = default set by makefile
+endif
+
+NDEFENV3 ?= default set by makefile
+
+ifndef NDEFENV4
+	# Should be set with NODEFENV2="" (note the quotes) in the shell (before "make" in the command line)
+	NDEFENV4 = default set by makefile
+endif
+
+NDEFENV5 ?= default set by makefile
+
+
+.PHONE: all
+
+# This is valid
+# all: ; @echo CMDLINE is $(CMDLINE)
+
+all:
+# command line overrides makefile
+	@echo CMDLINE is $(CMDLINE)
+# makefile (without -e) overrides environment variable
+	@echo ENVIRONMENT is $(ENVIRONMENT)
+# simple makefile variable
+	@echo MAKEFILE is $(MAKEFILE)
+# makefile default variable
+	@echo DEFAULT is $(DEFAULT)
+# makefile default not needed
+	@echo NDEFENV is $(NDEFENV)
+# makefile default not needed
+	@echo NDEFCMD is $(NDEFCMD)
+
+# ifndef sees empty variables as undefined
+# FOO= is considered set to an empty string
+	@echo NDEFENV2 is $(NDEFENV2)
+	@echo NDEFENV3 is $(NDEFENV3)
+# ifndef sees empty variables as undefined
+	@echo NDEFENV4 is $(NDEFENV4)
+	@echo NDEFENV5 is $(NDEFENV5)

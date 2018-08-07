@@ -1,0 +1,12 @@
+# vim: filetype=make
+# See page 13 of "The GNU Make Book"
+#
+# run with "make -f tgmb_ex_1.11"
+#
+# Show built-in version variables
+
+.PHONY: all
+all:
+	@echo MAKE_VERSION = $(MAKE_VERSION)
+# extra spaces are ignored unless quoted
+	@echo .FEATURES '  ' = $(.FEATURES)

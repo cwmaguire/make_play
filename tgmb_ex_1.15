@@ -1,0 +1,40 @@
+# vim: filetype=make
+# See page 21 of "The GNU Make Book"
+#
+# run with "make -f tgmb_ex_1.15"
+#
+# Use "which" shell command
+
+# Assign only if not already assigned.
+# Shortcut for ifndef \n APP = curl \n endif
+APP ?= curl
+
+# If which doesn't return anything than this simply expanded
+# variable will hold an empty string, which evaluates to false
+# (I could do this all in one line but want to demonstrate
+#  using a simple variable assignment)
+APP_PATH := $(shell which $(APP))
+HAVE_APP := $(if $(APP_PATH),yes)
+
+# Do the same except with recursively expanded variables
+APP_PATH2 = $(shell which $(APP))
+HAVE_APP2 = $(if $(APP_PATH2),yes)
+
+# This doesn't trip because APP_PATH2 is defined and
+# is _NOT_ empty because it's a recursively evaluated
+# variable that hasn't been evaluated: ifndef just checks
+# to see if it either isn't defined or holds an empty string.
+# It doesn't hold an empty string since it holds:
+# "$(if $(APP_PATH2),yes)
+ifndef HAVE_APP2
+$(error $(APP) is missing)
+endif
+
+ifndef HAVE_APP
+$(error $(APP) is missing)
+endif
+
+.PHONY: all
+
+all:
+	@echo "Have $(APP)? $(HAVE_APP)"

@@ -1,0 +1,17 @@
+# vim: filetype=make
+# See page 19 of "The GNU Make Book"
+#
+# run with "make -f tgmb_ex_1.14"
+#
+# Demonstrate that $(fun foo) is the same as (call fun,foo)
+# for built-in functions
+
+foo = $(info This is foo)
+
+.PHONY: all
+
+all:
+	$(info This is $$(info ...))
+	$(call info,This is $$(call info,...))
+	$(call foo)
+	$(foo)
