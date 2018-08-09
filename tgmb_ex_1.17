@@ -1,0 +1,22 @@
+# vim: filetype=make
+# See page 24 of "The GNU Make Book"
+#
+# run with "make -f tgmb_ex_1.17"
+#
+# Use $(eval ...) to write a simple variable once
+# and lazily (i.e. only when it's actually used)
+#
+# This combines the best features of recursive variables
+# and simple variables
+
+# Shows that $(eval ...) doesn't return anything
+A = 1
+$(info $(eval A = 2)$(A))
+$(info )
+
+SHALIST = $(eval SHALIST := $(shell find . -name 'tgmb*' | xargs shasum))$(SHALIST)
+$(info Before use SHALIST is: $(value SHALIST))
+$(info )
+$(info SHALIST is: $(SHALIST))
+$(info )
+$(info After use SHALIST is: $(value SHALIST))
