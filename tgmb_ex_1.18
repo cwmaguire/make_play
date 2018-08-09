@@ -1,0 +1,25 @@
+# vim: filetype=make
+# See page 24 of "The GNU Make Book"
+#
+# run with "make -f tgmb_ex_1.18"
+#
+# Play with list operations
+
+LIST = a b c
+$(info $(LIST))
+$(info First word of "$(LIST)" is "$(firstword $(LIST))")
+$(info Number of  words in "$(LIST)" is $(words $(LIST)))
+$(info Word # 1 in "$(LIST)" is $(word 1,$(LIST)))
+$(info Word # 2 in "$(LIST)" is $(word 2,$(LIST)))
+$(info Word # 3 in "$(LIST)" is $(word 3,$(LIST)))
+$(info Words # 2 and 3 in "$(LIST)" are "$(wordlist 2,3,$(LIST))")
+
+lastword = $(if $1,$(word $(words $1),$1))
+$(info Last word of "$(LIST)" is "$(lastword $(LIST))")
+
+notlast = $(wordlist 2,$(words $1),dummy $1)
+$(info 2nd-to-last word in $(LIST) is "$(call notlast,$(LIST))")
+
+reverse = $(eval $(2) =)$(foreach i,$(1),$(eval $(2)=$(i) $($(2))))$($(2))
+$(info Reversed $(LIST) is "$(call reverse,$(LIST),X)")
+$(info First word of "$(call reverse,$(LIST),X)" is "$(firstword $(call reverse,$(LIST),X))")
