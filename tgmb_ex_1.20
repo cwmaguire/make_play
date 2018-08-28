@@ -1,0 +1,19 @@
+# vim: filetype=make
+# See page 21 of "The GNU Make Book"
+#
+# run with "make -f tgmb_ex_1.20"
+#
+# Second expansion
+
+.SECONDEXPANSION:
+
+FOO = foo
+
+# $$(FOO) is expanded to $(FOO) on read and then again to
+# bar when the all target is run
+all: $$(FOO)
+all: ; @echo Making $@ from $?
+
+bar: ; @echo Making $@
+
+FOO = bar
