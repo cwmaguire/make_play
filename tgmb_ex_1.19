@@ -1,0 +1,43 @@
+# vim: filetype=make
+# See page 26 of "The GNU Make Book"
+#
+# run with "make -f tgmb_ex_1.19"
+#
+# User-defined functions
+
+make_date = $1/$2/$3
+today = $(call make_date,5,5,2014)
+$(info Today is $(today))
+
+more_than_nine_args = $(10)
+mtna = $(call more_than_nine_args,,,,,,,,,,10)
+$(info Arg 10 is $(mtna))
+
+return_function_name = $0
+$(info Fun name is $(call return_function_name))
+
+# backslash doesn't need to be escaped
+unix_to_dos = $(subst /,\,$1)
+$(info Unix->DOS $(call unix_to_dos,/a/b/c))
+
+# Three approaches to handling arguments with commas:
+swap = $2 $1
+
+FIRST := first,argument
+$(info Swapped with $$(First): $(call swap,$(FIRST),second))
+
+c := ,
+$(info Swapped with c := , $(call swap,first$cargument,second))
+
+, := ,
+$(info Swapped with , := , $(call swap,first$(,)argument,second))
+
+map = $(foreach a,$2,$(call $1,$a))
+print_variable = $(info $1 ($(value $1) -> $($1)) )
+print_variables = $(call map,print_variable,$1)
+$(call print_variables,c today)
+
+reduce = $(if $(strip $2),$(call reduce,$1,$(wordlist 2,$(words $2),$2),$(call $1,$(firstword $2),$3)),$3)
+check_uniq = $(if $(filter $1,$2),$2,$2 $1)
+uniq = $(call reduce,check_uniq,$1)
+$(info $(call uniq,c b a a c c b a c b a))
