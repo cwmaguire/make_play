@@ -1,0 +1,12 @@
+# vim: filetype=make
+# See page 35 of "The GNU Make Book"
+#
+# run with "make -f tgmb_ex_1.26"
+#
+# Variable name from variable
+
+a = b
+a$(a) = c
+
+# outputs 'c'
+all: ; $(info $(ab))
