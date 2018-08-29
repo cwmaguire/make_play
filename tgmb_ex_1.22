@@ -13,5 +13,8 @@
 # code to be 0. "false" would return 1.
 # "@" just prevents a shell command from being echo'ed.
 
+# changes variable, but does not change search path
+.INCLUDE_DIRS += /home/lulu/dev
+
 $(info $(.INCLUDE_DIRS))
 all: ; @true
