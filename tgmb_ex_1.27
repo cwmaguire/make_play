@@ -1,0 +1,10 @@
+# vim: filetype=make
+# See page 36 of "The GNU Make Book"
+#
+# run with "make --eval=FOO=BAR -f tgmb_ex_1.27"
+#
+# command line eval
+#
+# The --eval arg is run as the first line of the make file
+
+all: ; @echo FOO is $(FOO)
