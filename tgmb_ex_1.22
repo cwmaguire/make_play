@@ -1,0 +1,17 @@
+# vim: filetype=make
+# See page 31 of "The GNU Make Book"
+#
+# run with:
+#  "make -f tgmb_ex_1.21"
+#
+# .INCLUDE_DIRS
+#
+# -I only works with existing paths
+#  e.g. make -I /usr/foo won't change .INCLUDE_DIRS
+#
+# "true" is just a BASH command that causes the return
+# code to be 0. "false" would return 1.
+# "@" just prevents a shell command from being echo'ed.
+
+$(info $(.INCLUDE_DIRS))
+all: ; @true
