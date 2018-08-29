@@ -1,0 +1,20 @@
+# vim: filetype=make
+# See page 31 of "The GNU Make Book"
+#
+# run with "make -f tgmb_ex_1.23"
+#
+# .FEATURES built-in variable
+
+ifdef .FEATURES
+	features = true
+else
+	features = false
+endif
+
+has-order-only := $(filter order-only,$(.FEATURES))
+
+$(info has .FEATURES: $(features))
+$(info $(.FEATURES))
+$(info has-order-only: $(has-order-only))
+
+all: ; @true
