@@ -1,0 +1,17 @@
+# vim: filetype=make
+# See page 30 of "The GNU Make Book"
+#
+# run with:
+#  "make -f tgmb_ex_1.21"
+#  FOO=1 "make -f tgmb_ex_1.21"
+#  BAR=1 "make -f tgmb_ex_1.21"
+#
+# else
+
+ifdef FOO
+$(info FOO defined)
+else ifdef BAR
+$(info BAR defined)
+else
+$(info BAR not defined)
+endif
