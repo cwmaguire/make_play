@@ -46,3 +46,11 @@ Some directories have a README explaining what the Makefile in that directory ex
 - tgmb_ex_1.16: Use $() and ${} variable expansion syntax
 - tgmb_ex_1.17: Create a simple variable that is lazily evaluated once
 - tgmb_ex_1.18: List operators and a clumsy reverse function
+- tgmb_ex_1.19: Playing with user-defined functions
+- tgmb_ex_1.20: Using the .SECONDEXPANSION: target
+- tgmb_ex_1.21: Using 'else' in an 'ifdef'
+- tgmb_ex_1.22: Built-in .INCLUDE_DIRS variable
+- tgmb_ex_1.23: Built-in .FEATURES variable
+- tgmb_ex_1.24: Built-in .DEFAULT_GOAL variable
+- tgmb_ex_1.25: abspath and relpath functions
+- tgmb_ex_1.26: Create variable name using contents of variable
